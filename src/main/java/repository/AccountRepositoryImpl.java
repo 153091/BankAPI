@@ -17,14 +17,14 @@ public class AccountRepositoryImpl implements AccountRepository {
     }
 
     @Override
-    public void addAccount(User client, Account account) throws SQLException {
+    public void addAccount(User user, Account account) throws SQLException {
         Statement stmt = conn.createStatement();
-        stmt.executeQuery("sql statement");
+        stmt.executeUpdate("select id, number, amount, currency from accounts where clients_id = ?");
 
     }
 
     @Override
-    public List<Account> getAllUserAccounts(User client) throws SQLException {
+    public List<Account> getAllUserAccounts(User user) throws SQLException {
         return null;
     }
 }
