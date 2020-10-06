@@ -2,28 +2,72 @@ package repository;
 
 import Entity.User;
 
+import javax.sql.DataSource;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class UserRepositoryImpl implements UserRepository {
 
-    private final static String SELECT_ALL_USERS = "select id, name, age from users";
-    private final static String GET_USER_BY_ID = "select id, name, age from users where id = ?";
-    private final static String UPDATE_USERS = "update users set name = ?, email = ?  where id = ?";
+    private final static String SELECT_ALL_USERS = "select * from users";
+    private final static String GET_USER_BY_ID = "select * from users where id = ?";
+    private final static String UPDATE_USERS = "update users set name = ?, age = ?  where id = ?";
 
+    private DataSource dataSource;
 
-    @Override
-    public List<User> getAll() throws SQLException {
-        return null;
+    public UserRepositoryImpl(DataSource dataSource) {
+        this.dataSource = dataSource;
     }
 
     @Override
+    public List<User> getAll() throws SQLException {
+        try(Connection connection = dataSource.getConnection();
+            PreparedStatement stmt = connection.prepareStatement(SELECT_ALL_USERS)){
+            ResultSet resultSet = stmt.executeQuery();
+            List<User> userList = new ArrayList<>();
+            while (resultSet.next()) {
+                User user = new User();
+                user.setId(resultSet.getInt("id"));
+                user.setName(resultSet.getString("name"));
+                user.setAge(resultSet.getInt("age"));
+                userList.add(user);
+            }
+            if (userList.isEmpty()) {
+                throw new SQLException("Not found any client!");
+            } else {
+                return userList;
+            }
+        }
+    }
+
+
+    @Override
     public User getUserById(Integer id) throws SQLException {
-        return null;
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement stmt = connection.prepareStatement(GET_USER_BY_ID)) {
+            stmt.setInt(1, id);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                User user = User.builder()
+                        .id(rs.getInt(1))
+                        .name(rs.getString(2))
+                        .age(rs.getInt(3))
+                        .build();
+                return user;
+            }
+        }
     }
 
     @Override
     public void updateUser(User user) throws SQLException {
-
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement stmt = connection.prepareStatement(UPDATE_USERS)) {
+            stmt.setString(1, user.getName());
+            stmt.setInt(2, user.getAge());
+            stmt.execute();
+        }
     }
 }
