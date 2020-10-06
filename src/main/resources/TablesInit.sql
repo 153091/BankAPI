@@ -11,23 +11,20 @@ CREATE TABLE users
     name       VARCHAR                 NOT NULL,
     age        INTEGER                 NOT NULL
 );
-CREATE UNIQUE INDEX users_unique_email_idx ON clients (email);
 
 CREATE TABLE accounts
 (
     id         INTEGER DEFAULT global_seq.nextval PRIMARY KEY,
-    clients_id INTEGER NOT NULL,
+    user_id INTEGER NOT NULL,
     number     VARCHAR NOT NULL,
-    amount     DOUBLE NOT NULL,
-    currency   VARCHAR NOT NULL,
-    FOREIGN KEY (clients_id) REFERENCES clients (id) ON DELETE CASCADE
+    balance     DOUBLE NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
 );
 
-CREATE TABLE credit_cards
+CREATE TABLE cards
 (
     id         INTEGER   DEFAULT global_seq.nextval PRIMARY KEY,
     account_id INTEGER                 NOT NULL,
     number     VARCHAR                 NOT NULL,
-    registered TIMESTAMP DEFAULT now() NOT NULL,
     FOREIGN KEY (account_id) REFERENCES accounts (id) ON DELETE CASCADE
 );
