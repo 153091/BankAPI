@@ -3,6 +3,8 @@ import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
 
 import org.h2.tools.DeleteDbFiles;
+import org.h2.tools.Console;
+import org.h2.tools.Server;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -69,7 +71,7 @@ public class Main {
             statement = connection.createStatement();
 
 
-            String sqlCreate = String.join("\n",Files.readAllLines(Paths.get(Server.class.getResource("/CreateTables.sql").toURI())));
+            String sqlCreate = String.join("\n",Files.readAllLines(Paths.get(Server.class.getResource("/TablesInit.sql").toURI())));
 
             try (PreparedStatement statement1 = connection.prepareStatement(sqlCreate)) {
                 statement1.execute();
@@ -80,10 +82,23 @@ public class Main {
             //STEP 4: Clean-Up environment
             statement.close();
             connection.close();
-        } catch (SQLException | URISyntaxException | IOException ex) {
+        } catch(SQLException se) {
             //Handle errors for JDBC
-            //Тут закрыть статмен и конект???????????????? try with resources
-            ex.printStackTrace();
-        }
+            se.printStackTrace();
+        } catch(Exception e) {
+            //Handle errors for Class.forName
+            e.printStackTrace();
+        } finally {
+            //finally block used to close resources
+            try{
+                if(statement!=null) statement.close();
+            } catch(SQLException se2) {
+            } // nothing we can do
+            try {
+                if(connection!=null) connection.close();
+            } catch(SQLException se){
+                se.printStackTrace();
+            } //end finally try
+        } //end try
     }
 }
