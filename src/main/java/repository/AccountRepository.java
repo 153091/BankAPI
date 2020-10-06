@@ -1,7 +1,7 @@
 package repository;
 
-import impl.Account;
-import impl.User;
+import Entity.Account;
+import Entity.User;
 
 import java.sql.SQLException;
 import java.util.List;
