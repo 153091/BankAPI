@@ -7,7 +7,9 @@ import java.util.List;
 
 public class UserRepositoryImpl implements UserRepository {
 
-    private final static String GET_USER_BY_ID = "select id, name, email, registered from clients where id = ?";
+    private final static String SELECT_ALL_USERS = "select id, name, age from users";
+    private final static String GET_USER_BY_ID = "select id, name, age from users where id = ?";
+    private final static String UPDATE_USERS = "update users set name = ?, email = ?  where id = ?";
 
 
     @Override

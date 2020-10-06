@@ -17,7 +17,6 @@ CREATE TABLE accounts
     id         INTEGER DEFAULT global_seq.nextval PRIMARY KEY,
     user_id    INTEGER NOT NULL,
     number     VARCHAR NOT NULL,
-    balance    DOUBLE NOT NULL,
     FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
 );
 
@@ -26,5 +25,6 @@ CREATE TABLE cards
     id         INTEGER   DEFAULT global_seq.nextval PRIMARY KEY,
     account_id INTEGER                 NOT NULL,
     number     VARCHAR                 NOT NULL,
+    balance    DOUBLE                  NOT NULL,
     FOREIGN KEY (account_id) REFERENCES accounts (id) ON DELETE CASCADE
 );
