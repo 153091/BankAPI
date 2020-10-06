@@ -8,10 +8,69 @@ import java.util.List;
 
 public interface AccountRepository {
 
-    // add account to given user
-    void addAccount(User client, Account account) throws SQLException;
 
-    // return all accounts of given user
-    List<Account> getAllUserAccounts(User client) throws SQLException;
+    /**
+     *
+     * @param client
+     * @param account
+     * @throws SQLException
+     * add account
+     */
+    void addAccount(Client client, Account account) throws SQLException;
 
+    /**
+     *
+     * @param client
+     * @return
+     * @throws SQLException
+     * find all client's accounts
+     */
+    List<Account> getAllClientAccounts(Client client) throws SQLException;
+
+    Account getAccountById(Account account) throws SQLException;
+
+    /**
+     *
+     * @param client
+     * @return
+     * @throws SQLException
+     * find client's account
+     */
+    Account getAccountByClientId(Client client) throws SQLException;
+
+    /**
+     *
+     * @param client
+     * @param account
+     * update account
+     */
+    void updateAccount(Client client, Account account);
+
+    /**
+     *
+     * @param account
+     * @return
+     * delete account
+     */
+    boolean deletAccount(Account account);
+
+
+
+
+
+
+//    BigDecimal checkBalanceByAccountNumber(String accountNumber) throws SQLException;
+//    BigDecimal checkBalanceByAccountId(Integer accountId) throws SQLException;
+//
+//    boolean depositFunds(String accountNumber, BigDecimal amount) throws SQLException;
+//
+//    List<Account> getAccountListByClientId (Integer clientId) throws SQLException;
+//
+//    List<CreditCard> getCreditCardListByAccountId(Integer accountId) throws SQLException;
+//
+//
+//    boolean addCreditCard(Integer accountId, String cardNumber) throws SQLException;
+//
+//    boolean isCardNumberExists(String cardNumber) throws SQLException;
+//
 }
