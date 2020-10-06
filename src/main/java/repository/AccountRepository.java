@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface AccountRepository {
 
-    void addAccount(User user, Account account) throws SQLException;
+    void addAccount(Account account) throws SQLException;
 
     List<Account> getAllUserAccounts(User user) throws SQLException;
 

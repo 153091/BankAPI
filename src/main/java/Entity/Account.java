@@ -8,7 +8,7 @@ import lombok.*;
 @Builder
 public class Account {
     private int id;
-    private User user;
+    private int userId;
     private String number;
 
 }

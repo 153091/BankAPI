@@ -26,10 +26,10 @@ public class AccountRepositoryImpl implements AccountRepository {
     }
 
     @Override
-    public void addAccount(User user, Account account) throws SQLException {
+    public void addAccount(Account account) throws SQLException {
         try(Connection connection = dataSource.getConnection();
             PreparedStatement ps = connection.prepareStatement(ADD_ACCOUNT)){
-            ps.setInt(1, user.getId());
+            ps.setInt(1, account.getUserId());
             ps.setString(2, account.getNumber());
             ps.execute();
         }
@@ -45,6 +45,7 @@ public class AccountRepositoryImpl implements AccountRepository {
             while (rs.next()) {
                 Account account = Account.builder()
                         .id(rs.getInt("id"))
+                        .userId(rs.getInt("user_id"))
                         .number(rs.getString("number"))
                         .build();
                 accounts.add(account);
@@ -66,6 +67,7 @@ public class AccountRepositoryImpl implements AccountRepository {
             if (rs.next()) {
                 Account account = Account.builder()
                         .id(rs.getInt("id"))
+                        .userId(rs.getInt("user_id"))
                         .number(rs.getString("number"))
                         .build();
                 return account;
