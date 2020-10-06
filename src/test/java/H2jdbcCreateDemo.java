@@ -1,3 +1,5 @@
+import org.h2.tools.DeleteDbFiles;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -13,6 +15,7 @@ public class H2jdbcCreateDemo {
     static final String PASS = "";
 
     public static void main(String[] args) {
+        DeleteDbFiles.execute("~", "test", true);
         Connection conn = null;
         Statement stmt = null;
         try {
@@ -26,18 +29,18 @@ public class H2jdbcCreateDemo {
             //STEP 3: Execute a query
             System.out.println("Creating table in given database...");
             stmt = conn.createStatement();
-            /**String sql =  "CREATE TABLE   REGISTRATION " +
+            String sql =  "CREATE TABLE   REGISTRATION " +
                     "(id INTEGER not NULL, " +
                     " first VARCHAR(255), " +
                     " last VARCHAR(255), " +
                     " age INTEGER, " +
                     " PRIMARY KEY ( id ))";
             stmt.executeUpdate(sql);
-            System.out.println("Created table in given database...");*/
+            System.out.println("Created table in given database...");
 
-            String sql = "DROP TABLE REGISTRATION";
-            stmt.executeUpdate(sql);
-            System.out.println("Delete table in given database...");
+            //String sql = "DROP TABLE REGISTRATION";
+            //stmt.executeUpdate(sql);
+            //System.out.println("Delete table in given database...");
 
             // STEP 4: Clean-up environment
             stmt.close();
