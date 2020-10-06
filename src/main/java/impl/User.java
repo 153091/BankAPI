@@ -8,33 +8,12 @@ public class User extends EntityId {
     private int age;
     private List<Account> accounts;
 
-    public User() {
-    }
-
-    public User(String name, int age) {
-        this.name = name;
-        this.age = age;
-    }
-
-    public User(String name, int age, List<Account> accounts) {
-        this.name = name;
-        this.age = age;
-        this.accounts = accounts;
-    }
-    public User(int id, String name, int age) {
-        super(id);
-        this.name = name;
-        this.age = age;
-    }
-
     public User(int id, String name, int age, List<Account> accounts) {
         super(id);
         this.name = name;
         this.age = age;
         this.accounts = accounts;
     }
-
-
 
     public String getName() {
         return name;

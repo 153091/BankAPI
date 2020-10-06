@@ -7,20 +7,6 @@ public class Card extends EntityId{
     private Account account;
     private User user;
 
-    public Card() {
-    }
-
-    public Card(Account account, String number) {
-        this.account = account;
-        this.number = number;
-    }
-
-    public Card(Account account, String number, User user) {
-        this.account = account;
-        this.number = number;
-        this.user = user;
-    }
-
     public Card(int id, Account account, String number, User user) {
         super(id);
         this.account = account;
