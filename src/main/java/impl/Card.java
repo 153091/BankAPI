@@ -2,13 +2,14 @@ package impl;
 
 import java.util.Objects;
 
-public class Card extends EntityId{
-    private String number;
+public class Card {
+    private int id;
     private Account account;
+    private String number;
     private User user;
 
     public Card(int id, Account account, String number, User user) {
-        super(id);
+        this.id = id;
         this.account = account;
         this.number = number;
         this.user = user;
@@ -34,7 +35,7 @@ public class Card extends EntityId{
         return user;
     }
 
-    public void setClient(User user) {
+    public void setUser(User user) {
         this.user = user;
     }
 

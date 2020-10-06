@@ -3,13 +3,14 @@ package impl;
 import java.util.List;
 import java.util.Objects;
 
-public class User extends EntityId {
+public class User {
+    private int id;
     private String name;
     private int age;
     private List<Account> accounts;
 
     public User(int id, String name, int age, List<Account> accounts) {
-        super(id);
+        this.id =id;
         this.name = name;
         this.age = age;
         this.accounts = accounts;
@@ -55,10 +56,5 @@ public class User extends EntityId {
         User user = (User) o;
         return Objects.equals(name, user.name) &&
                 Objects.equals(age, user.age);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(name, age);
     }
 }
