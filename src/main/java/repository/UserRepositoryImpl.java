@@ -83,6 +83,8 @@ public class UserRepositoryImpl implements UserRepository {
             stmt.setInt(2, user.getAge());
             stmt.setInt(3, user.getId());
             stmt.execute();
+        } catch (SQLException throwabl) {
+            throwabl.printStackTrace();
         }
     }
 }

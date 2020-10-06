@@ -14,7 +14,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.*;
 
-public class Main {
+public class ServerStart {
 
     static final String JDBC_DRIVER = "org.h2.Driver";
     static final String DB_URL = "jdbc:h2:~/test";
@@ -31,7 +31,7 @@ public class Main {
         server.setExecutor(null); //creates a default executor
         server.start();
 
-        bsh2();
+        createH2();
 
         Console console = new Console();
         console.runTool(args);
@@ -51,7 +51,8 @@ public class Main {
 
 
 
-    static void bsh2() throws ClassNotFoundException  {
+
+    static void createH2() throws ClassNotFoundException  {
         DeleteDbFiles.execute("~", "test", true);
 
         Connection connection = null;

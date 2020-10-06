@@ -8,14 +8,12 @@ import java.util.List;
 
 public interface AccountRepository {
 
-    void addAccount(Account account) throws SQLException;
+    void addAccount(User user, Account account) throws SQLException;
 
-    List<Account> getAllClientAccounts(User user) throws SQLException;
+    List<Account> getAllUserAccounts(User user) throws SQLException;
 
     Account getAccountById(Integer id) throws SQLException;
 
-    Account getAccountByClientId(User user) throws SQLException;
-
-    void updateAccount(User user, Account account);
+    void updateAccount(Account account);
 
 }
