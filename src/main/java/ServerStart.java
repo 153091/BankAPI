@@ -50,8 +50,6 @@ public class ServerStart {
     }
 
 
-
-
     static void createH2() throws ClassNotFoundException  {
         DeleteDbFiles.execute("~", "test", true);
 
