@@ -58,6 +58,9 @@ public class UserRepositoryImpl implements UserRepository {
                         .build();
                 return user;
             }
+            else {
+                throw new SQLException("User not found.");
+            }
         }
     }
 
