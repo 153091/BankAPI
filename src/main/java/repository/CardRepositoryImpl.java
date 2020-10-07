@@ -85,7 +85,8 @@ public class CardRepositoryImpl implements CardRepository {
         try(Connection connection = dataSource.getConnection();
             PreparedStatement stmt = connection.prepareStatement(UPDATE_CARD)) {
             stmt.setDouble(1, card.getBalance());
-            stmt.setInt(2, card.getId());
+            stmt.setString(2, card.getNumber());
+            stmt.setInt(3, card.getId());
             stmt.execute();
         } catch (SQLException throwabl) {
             throwabl.printStackTrace();

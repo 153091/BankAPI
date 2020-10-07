@@ -99,6 +99,5 @@ public class CardRepositoryTest {
         final Card actual = cardRepository.getCardById(0);
         assertEquals(tempCard.getNumber(), actual.getNumber());
         assertEquals(tempCard.getBalance(), actual.getBalance());
-        assertEquals(tempCard.getAccountId(), actual.getAccountId());
     }
 }
