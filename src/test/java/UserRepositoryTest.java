@@ -2,6 +2,7 @@ import Entity.User;
 import org.h2.jdbcx.JdbcConnectionPool;
 import org.h2.tools.Server;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import repository.UserRepositoryImpl;
 
@@ -20,8 +21,8 @@ public class UserRepositoryTest {
     private static final UserRepositoryImpl userRepository = new UserRepositoryImpl(dataSource);
 
 
-    @BeforeAll
-    static void beforeAll() throws Exception {
+    @BeforeEach
+    public void beforeAll() throws Exception {
         final String sqlCreate = String.join("\n",Files.readAllLines(Paths.get(Server.class.getResource("/TablesInit.sql").toURI())));
         try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(sqlCreate)) {
@@ -54,7 +55,7 @@ public class UserRepositoryTest {
     }
 
     @Test
-    public void getAll() throws SQLException {
+    public void getAllTest() throws SQLException {
         User tempUser = new User();
         tempUser.setName("Gosha");
         tempUser.setAge(50);
@@ -76,13 +77,14 @@ public class UserRepositoryTest {
     }
 
     @Test
-    void updateUser() throws SQLException {
+    void updateUserTest() throws SQLException {
         User tempUser = new User();
         tempUser.setName("Petya");
         tempUser.setAge(50);
         tempUser.setId(0);
         userRepository.addUser(tempUser);
 
+        tempUser.setName("Kolya");
         tempUser.setAge(20);
         userRepository.updateUser(tempUser);
         final User actual = userRepository.getUserById(0);

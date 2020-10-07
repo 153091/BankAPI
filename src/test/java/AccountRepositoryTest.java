@@ -3,6 +3,7 @@ import Entity.User;
 import org.h2.jdbcx.JdbcConnectionPool;
 import org.h2.tools.Server;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import repository.AccountRepositoryImpl;
 
@@ -23,8 +24,8 @@ public class AccountRepositoryTest {
     private static final AccountRepositoryImpl accountRepository = new AccountRepositoryImpl(dataSource);
 
 
-    @BeforeAll
-    static void beforeAll() throws Exception {
+    @BeforeEach
+    public void beforeAll() throws Exception {
         final String sqlCreate = String.join("\n",Files.readAllLines(Paths.get(Server.class.getResource("/TablesInit.sql").toURI())));
         final String sqlPopulate = String.join("\n",Files.readAllLines(Paths.get(Server.class.getResource("/Populate.sql").toURI())));
         Connection connection = dataSource.getConnection();
@@ -61,7 +62,7 @@ public class AccountRepositoryTest {
     }
 
     @Test
-    public void getAllUserAccounts() throws SQLException {
+    public void getAllUserAccountsTest() throws SQLException {
         Account tempAccount = new Account();
         tempAccount.setNumber("12 13 55");
         tempAccount.setUserId(0);
@@ -78,6 +79,19 @@ public class AccountRepositoryTest {
             assertEquals(allAccounts.get(i).getNumber(), actual.getNumber());
             assertEquals(allAccounts.get(i).getUserId(), actual.getUserId());
         }
+    }
 
+    @Test
+    public void updateAccountTest() throws SQLException {
+        Account tempAccount = new Account();
+        tempAccount.setNumber("12 13 55");
+        tempAccount.setUserId(0);
+        tempAccount.setId(0);
+
+        accountRepository.updateAccount(tempAccount);
+
+        final Account actual = accountRepository.getAccountById(0);
+        assertEquals(tempAccount.getNumber(), actual.getNumber());
+        assertEquals(tempAccount.getUserId(), actual.getUserId());
     }
 }

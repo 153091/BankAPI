@@ -16,7 +16,7 @@ public class CardRepositoryImpl implements CardRepository {
     private static final String ADD_CARD = "insert into cards (account_id, number, balance) values (?, ?, ?)";
     private static final String GET_ALL_CLIENT_CARDS = "select * from cards where account_id = ?";
     private static final String GET_CARD_BY_ID = "select * from cards where id = ?";
-    private static final String UPDATE_CARD = "update cards set balance = ? where id = ?";
+    private static final String UPDATE_CARD = "update cards set balance = ?, number = ? where id = ?";
 
     private DataSource dataSource;
 

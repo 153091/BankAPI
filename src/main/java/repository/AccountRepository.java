@@ -14,6 +14,6 @@ public interface AccountRepository {
 
     Account getAccountById(Integer id) throws SQLException;
 
-    void updateAccount(Account account);
+    void updateAccount(Account account) throws SQLException;
 
 }

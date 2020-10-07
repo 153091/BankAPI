@@ -14,7 +14,7 @@ public class UserRepositoryImpl implements UserRepository {
 
     private final static String SELECT_ALL_USERS = "select * from users";
     private final static String GET_USER_BY_ID = "select * from users where id = ?";
-    private final static String UPDATE_USERS = "update users set age = ?  where id = ?";
+    private final static String UPDATE_USERS = "update users set name = ?, age = ?  where id = ?";
     private final static String ADD_USER = "INSERT INTO users (name, age) VALUES (?, ?)";
 
     private DataSource dataSource;
@@ -79,8 +79,9 @@ public class UserRepositoryImpl implements UserRepository {
     public void updateUser(User user) throws SQLException {
         try (Connection connection = dataSource.getConnection();
              PreparedStatement stmt = connection.prepareStatement(UPDATE_USERS)) {
-            stmt.setInt(1, user.getAge());
-            stmt.setInt(2, user.getId());
+            stmt.setString(1, user.getName());
+            stmt.setInt(2, user.getAge());
+            stmt.setInt(3, user.getId());
             stmt.execute();
         } catch (SQLException throwabl) {
             throwabl.printStackTrace();

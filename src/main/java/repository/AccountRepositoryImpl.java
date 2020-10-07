@@ -79,7 +79,7 @@ public class AccountRepositoryImpl implements AccountRepository {
     }
 
     @Override
-    public void updateAccount(Account account) {
+    public void updateAccount(Account account) throws SQLException {
         try(Connection connection = dataSource.getConnection();
             PreparedStatement stmt = connection.prepareStatement(UPDATE_ACCOUNT)) {
             stmt.setString(1, account.getNumber());
