@@ -15,14 +15,14 @@ import java.sql.SQLException;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class UserRepositoryTest {
-    private static final DataSource jdbcConnectionPool = JdbcConnectionPool.create("jdbc:h2:mem:test_mem", "sa", "");
-    private static final UserRepositoryImpl userRepository = new UserRepositoryImpl(jdbcConnectionPool);
+    private static final DataSource dataSource = JdbcConnectionPool.create("jdbc:h2:mem:test_mem", "sa", "");
+    private static final UserRepositoryImpl userRepository = new UserRepositoryImpl(dataSource);
 
 
     @BeforeAll
     static void beforeAll() throws Exception {
         final String sqlCreate = String.join("\n",Files.readAllLines(Paths.get(Server.class.getResource("/TablesInit.sql").toURI())));
-        try (Connection connection = jdbcConnectionPool.getConnection();
+        try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(sqlCreate)) {
             statement.executeUpdate();
         }

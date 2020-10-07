@@ -1,4 +1,4 @@
-import Entity.User;
+import Entity.Account;
 import org.h2.jdbcx.JdbcConnectionPool;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -15,40 +15,40 @@ import java.sql.SQLException;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class AccountRepositoryTest {
-    private static final DataSource jdbcConnectionPool = JdbcConnectionPool.create("jdbc:h2:mem:test_mem", "sa", "");
-    private static final AccountRepositoryImpl accountRepository = new AccountRepositoryImpl(jdbcConnectionPool);
+    private static final DataSource dataSource = JdbcConnectionPool.create("jdbc:h2:mem:test_mem", "sa", "");
+    private static final AccountRepositoryImpl accountRepository = new AccountRepositoryImpl(dataSource);
 
 
     @BeforeAll
     static void beforeAll() throws Exception {
         final String sqlCreateTables = String.join("\n", Files.readAllLines(Paths.get(AccountRepositoryTest.class.getResource("/CreateTables.sql").toURI())));
-        try (Connection connection = jdbcConnectionPool.getConnection();
+        try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(sqlCreateTables)) {
             statement.executeUpdate();
         }
     }
 
     @Test
-    public void addUserTest() throws SQLException {
-        User tempUser = new User();
-        tempUser.setName("Alex");
-        tempUser.setAge(28);
+    public void addAccountTest() throws SQLException {
+        Account tempAccount = new Account();
+        tempAccount.setNumber("12 13 14");
+        tempAccount.setUserId(1);
 
-        userRepository.addUser(tempUser);
+        accountRepository.addAccount(tempAccount);
 
-        final User actual = userRepository.getUserById(0);
-        assertEquals(tempUser.getName(), actual.getName());
-        assertEquals(tempUser.getAge(), actual.getAge());
+        final Account actual = accountRepository.getAccountById(0);
+        assertEquals(tempAccount.getNumber(), actual.getNumber());
+        assertEquals(tempAccount.getUserId(), actual.getUserId());
     }
 
     @Test
-    public void getUserByIdTest() throws SQLException {
-        User tempUser = new User();
-        tempUser.setName("Alex");
-        tempUser.setAge(28);
-        userRepository.addUser(tempUser);
-        final User actual = userRepository.getUserById(0);
-        assertEquals(tempUser.getName(), actual.getName());
-        assertEquals(tempUser.getAge(), actual.getAge());
+    public void getAccountByIdTest() throws SQLException {
+        Account tempAccount = new Account();
+        tempAccount.setNumber("12 13 14");
+        tempAccount.setUserId(1);
+        accountRepository.addAccount(tempAccount);
+        final Account actual = accountRepository.getAccountById(0);
+        assertEquals(tempAccount.getNumber(), actual.getNumber());
+        assertEquals(tempAccount.getUserId(), actual.getUserId());
     }
 }
