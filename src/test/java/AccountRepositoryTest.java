@@ -2,7 +2,6 @@ import Entity.Account;
 import Entity.User;
 import org.h2.jdbcx.JdbcConnectionPool;
 import org.h2.tools.Server;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import repository.AccountRepositoryImpl;
@@ -14,7 +13,6 @@ import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -78,6 +76,26 @@ public class AccountRepositoryTest {
             final Account actual = accountRepository.getAccountById(i);
             assertEquals(allAccounts.get(i).getNumber(), actual.getNumber());
             assertEquals(allAccounts.get(i).getUserId(), actual.getUserId());
+        }
+    }
+
+    @Test
+    public void testDeleteCard() throws SQLException {
+        Account tempAccount = new Account();
+        tempAccount.setNumber("12 13 55");
+        tempAccount.setUserId(0);
+        accountRepository.addAccount(tempAccount);
+
+        accountRepository.deleteAccountById(1);
+
+        boolean result = false;
+
+        try {
+            accountRepository.getAccountById(1);
+        } catch (SQLException ex) {
+            result = true;
+        } finally {
+            assertEquals(result, true);
         }
     }
 

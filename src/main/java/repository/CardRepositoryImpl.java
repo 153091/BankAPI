@@ -17,6 +17,7 @@ public class CardRepositoryImpl implements CardRepository {
     private static final String GET_ALL_CLIENT_CARDS = "select * from cards where account_id = ?";
     private static final String GET_CARD_BY_ID = "select * from cards where id = ?";
     private static final String UPDATE_CARD = "update cards set balance = ?, number = ? where id = ?";
+    private final static String DELETE_CARD = "delete from cards where id = ?";
 
     private DataSource dataSource;
 
@@ -90,6 +91,17 @@ public class CardRepositoryImpl implements CardRepository {
             stmt.execute();
         } catch (SQLException throwabl) {
             throwabl.printStackTrace();
+        }
+    }
+
+    @Override
+    public boolean deleteCardById(int id) throws SQLException {
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement stmt = connection.prepareStatement(DELETE_CARD)) {
+            stmt.setInt(1, id);
+            int affectedRow = stmt.executeUpdate();
+
+            return affectedRow != 0;
         }
     }
 }

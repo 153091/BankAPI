@@ -1,9 +1,7 @@
 import Entity.Account;
 import Entity.Card;
-import Entity.User;
 import org.h2.jdbcx.JdbcConnectionPool;
 import org.h2.tools.Server;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import repository.CardRepositoryImpl;
@@ -83,6 +81,27 @@ public class CardRepositoryTest {
             assertEquals(allCards.get(i).getNumber(), actual.getNumber());
             assertEquals(allCards.get(i).getBalance(), actual.getBalance());
             assertEquals(allCards.get(i).getAccountId(), actual.getAccountId());
+        }
+    }
+
+    @Test
+    public void testDeleteCard() throws SQLException {
+        Card tempCard = new Card();
+        tempCard.setAccountId(0);
+        tempCard.setNumber("111 222 333");
+        tempCard.setBalance(200);
+        cardRepository.addCard(tempCard);
+
+        cardRepository.deleteCardById(1);
+
+        boolean result = false;
+
+        try {
+            cardRepository.getCardById(1);
+        } catch (SQLException ex) {
+            result = true;
+        } finally {
+            assertEquals(result, true);
         }
     }
 

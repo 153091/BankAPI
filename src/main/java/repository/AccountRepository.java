@@ -16,4 +16,6 @@ public interface AccountRepository {
 
     void updateAccount(Account account) throws SQLException;
 
+    boolean deleteAccountById(int id) throws SQLException;
+
 }

@@ -1,7 +1,6 @@
 import Entity.User;
 import org.h2.jdbcx.JdbcConnectionPool;
 import org.h2.tools.Server;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import repository.UserRepositoryImpl;
@@ -77,7 +76,27 @@ public class UserRepositoryTest {
     }
 
     @Test
-    void testUpdateUser() throws SQLException {
+    public void testDeleteUser() throws SQLException {
+        User tempUser = new User();
+        tempUser.setName("Gosha");
+        tempUser.setAge(50);
+        userRepository.addUser(tempUser);
+
+        userRepository.deleteUserById(0);
+
+        boolean result = false;
+
+        try {
+            userRepository.getUserById(0);
+        } catch (SQLException ex) {
+            result = true;
+        } finally {
+            assertEquals(result, true);
+        }
+    }
+
+    @Test
+    public void testUpdateUser() throws SQLException {
         User tempUser = new User();
         tempUser.setName("Petya");
         tempUser.setAge(50);

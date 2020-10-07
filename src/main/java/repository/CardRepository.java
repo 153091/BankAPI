@@ -16,4 +16,6 @@ public interface CardRepository {
 
     void updateCard(Card card) throws SQLException;
 
+    boolean deleteCardById(int id) throws SQLException;
+
 }

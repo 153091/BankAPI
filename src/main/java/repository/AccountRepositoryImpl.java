@@ -17,6 +17,7 @@ public class AccountRepositoryImpl implements AccountRepository {
     private static final String GET_ALL_ACCOUNTS_BY_USER_ID = "select * from accounts where user_id = ?";
     private static final String ADD_ACCOUNT = "INSERT INTO accounts (user_id, number) VALUES (?, ?)";
     private static final String UPDATE_ACCOUNT = "update accounts set number = ? where id = ?";
+    private final static String DELETE_ACCOUNT = "delete from accounts where id = ?";
 
 
     private DataSource dataSource;
@@ -87,6 +88,17 @@ public class AccountRepositoryImpl implements AccountRepository {
             stmt.execute();
         } catch (SQLException throwabl) {
             throwabl.printStackTrace();
+        }
+    }
+
+    @Override
+    public boolean deleteAccountById(int id) throws SQLException {
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement stmt = connection.prepareStatement(DELETE_ACCOUNT)) {
+            stmt.setInt(1, id);
+            int affectedRow = stmt.executeUpdate();
+
+            return affectedRow != 0;
         }
     }
 }
