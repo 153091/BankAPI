@@ -11,7 +11,6 @@ import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -30,30 +29,26 @@ public class UserRepositoryTest {
     }
 
     @Test
-    public void () throws SQLException {
-        User expectedUser = new User();
-        expectedUser.setName("Nikita");
-        expectedUser.setSurname("Bazhenov");
-        expectedUser.setAge(32);
+    public void addUserTest() throws SQLException {
+        User tempUser = new User();
+        tempUser.setName("Alex");
+        tempUser.setAge(28);
 
-        final User saved = userRepository.save(expectedUser);
-        final User actual = userRepository.getById(saved.getId());
-        assertEquals(expectedUser.getName(), actual.getName());
-        assertEquals(expectedUser.getSurname(), actual.getSurname());
-        assertEquals(expectedUser.getAge(), actual.getAge());
+        userRepository.addUser(tempUser);
+
+        final User actual = userRepository.getUserById(0);
+        assertEquals(tempUser.getName(), actual.getName());
+        assertEquals(tempUser.getAge(), actual.getAge());
     }
 
     @Test
-    public void testGetById() throws SQLException {
-        User expectedUser = new User();
-        expectedUser.setName("Nikita");
-        expectedUser.setSurname("Bazhenov");
-        expectedUser.setAge(32);
-
-        final User saved = userRepository.save(expectedUser);
-        final User actual = userRepository.getById(0);
-        assertEquals(expectedUser.getName(), actual.getName());
-        assertEquals(expectedUser.getSurname(), actual.getSurname());
-        assertEquals(expectedUser.getAge(), actual.getAge());
+    public void getUserByIdTest() throws SQLException {
+        User tempUser = new User();
+        tempUser.setName("Alex");
+        tempUser.setAge(28);
+        userRepository.addUser(tempUser);
+        final User actual = userRepository.getUserById(0);
+        assertEquals(tempUser.getName(), actual.getName());
+        assertEquals(tempUser.getAge(), actual.getAge());
     }
 }

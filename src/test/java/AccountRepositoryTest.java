@@ -1,3 +1,4 @@
+import Entity.User;
 import org.h2.jdbcx.JdbcConnectionPool;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -28,14 +29,26 @@ public class AccountRepositoryTest {
     }
 
     @Test
-    public void testSave() throws SQLException {
-        Account expectedAccount = new Account();
-        expectedAccount.setAccountNumber(401817247);
-        expectedAccount.setUsersId(1);
+    public void addUserTest() throws SQLException {
+        User tempUser = new User();
+        tempUser.setName("Alex");
+        tempUser.setAge(28);
 
-        final Account saved = accountRepository.save(expectedAccount);
-        final Account actual = accountRepository.getById(saved.getId());
-        assertEquals(expectedAccount.getAccountNumber(), actual.getAccountNumber());
-        assertEquals(expectedAccount.getUsersId(), actual.getUsersId());
+        userRepository.addUser(tempUser);
+
+        final User actual = userRepository.getUserById(0);
+        assertEquals(tempUser.getName(), actual.getName());
+        assertEquals(tempUser.getAge(), actual.getAge());
+    }
+
+    @Test
+    public void getUserByIdTest() throws SQLException {
+        User tempUser = new User();
+        tempUser.setName("Alex");
+        tempUser.setAge(28);
+        userRepository.addUser(tempUser);
+        final User actual = userRepository.getUserById(0);
+        assertEquals(tempUser.getName(), actual.getName());
+        assertEquals(tempUser.getAge(), actual.getAge());
     }
 }

@@ -1,3 +1,5 @@
+import Entity.Card;
+import Entity.User;
 import org.h2.jdbcx.JdbcConnectionPool;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -27,16 +29,26 @@ public class CardRepositoryTest {
     }
 
     @Test
-    public void testSave() throws SQLException {
-        Card expectedCard = new Card();
-        expectedCard.setCardNumber(213124214);
-        expectedCard.setCardBalance(121123);
-        expectedCard.setAccountId(12);
+    public void addCardTest() throws SQLException {
+        Card tempCard = new Card();
+        tempCard.setName("Alex");
+        tempCard.setAge(28);
 
-        final Card saved = cardRepository.save(expectedCard);
-        final Card actual = cardRepository.getById(saved.getId());
-        assertEquals(expectedCard.getCardNumber(), actual.getCardNumber());
-        assertEquals(expectedCard.getCardBalance(), actual.getCardBalance());
-        assertEquals(expectedCard.getAccountId(), actual.getAccountId());
+        cardRepository.addUser(tempCard);
+
+        final Card actual = cardRepository.getCardById(0);
+        assertEquals(tempCard.getName(), actual.getName());
+        assertEquals(tempCard.getAge(), actual.getAge());
+    }
+
+    @Test
+    public void getCardByIdTest() throws SQLException {
+        User tempCard = new User();
+        tempCard.setName("Alex");
+        tempCard.setAge(28);
+        cardRepository.addUser(tempCard);
+        final User actual = cardRepository.getUserById(0);
+        assertEquals(tempCard.getName(), actual.getName());
+        assertEquals(tempCard.getAge(), actual.getAge());
     }
 }
