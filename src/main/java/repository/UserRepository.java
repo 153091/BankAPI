@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface UserRepository {
 
-    User addUser(User user) throws SQLException;
+    void addUser(User user) throws SQLException;
 
     // all users of DB
     List<User> getAll() throws SQLException;
@@ -16,6 +16,6 @@ public interface UserRepository {
     User getUserById(Integer id) throws SQLException;
 
     // update user
-    User updateUser(User user) throws SQLException;
+    void updateUser(User user) throws SQLException;
 
 }

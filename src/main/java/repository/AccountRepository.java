@@ -8,12 +8,12 @@ import java.util.List;
 
 public interface AccountRepository {
 
-    Account addAccount(Account account) throws SQLException;
+    void addAccount(Account account) throws SQLException;
 
     List<Account> getAllUserAccounts(User user) throws SQLException;
 
     Account getAccountById(Integer id) throws SQLException;
 
-    Account updateAccount(Account account);
+    void updateAccount(Account account);
 
 }

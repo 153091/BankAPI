@@ -8,12 +8,12 @@ import java.util.List;
 
 public interface CardRepository {
 
-    Card addCard(Card card) throws SQLException;
+    void addCard(Card card) throws SQLException;
 
     List<Card> getAllCards(Account account) throws SQLException;
 
     Card getCardById(Integer id) throws SQLException;
 
-    Card updateCard(Card card) throws SQLException;
+    void updateCard(Card card) throws SQLException;
 
 }

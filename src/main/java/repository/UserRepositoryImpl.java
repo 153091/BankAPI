@@ -24,7 +24,7 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public User addUser(User user) throws SQLException {
+    public void addUser(User user) throws SQLException {
         try(Connection connection = dataSource.getConnection();
             PreparedStatement stmt = connection.prepareStatement(ADD_USER)){
             stmt.setString(1, user.getName());
@@ -76,7 +76,7 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public User updateUser(User user) throws SQLException {
+    public void updateUser(User user) throws SQLException {
         try (Connection connection = dataSource.getConnection();
              PreparedStatement stmt = connection.prepareStatement(UPDATE_USERS)) {
             stmt.setString(1, user.getName());

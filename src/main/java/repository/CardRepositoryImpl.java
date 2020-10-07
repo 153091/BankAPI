@@ -25,7 +25,7 @@ public class CardRepositoryImpl implements CardRepository {
     }
 
     @Override
-    public Card addCard(Card card) throws SQLException {
+    public void addCard(Card card) throws SQLException {
         try(Connection connection = dataSource.getConnection();
             PreparedStatement ps = connection.prepareStatement(ADD_CARD)){
             ps.setInt(1, card.getAccountId());
@@ -81,7 +81,7 @@ public class CardRepositoryImpl implements CardRepository {
     }
 
     @Override
-    public Card updateCard(Card card) throws SQLException {
+    public void updateCard(Card card) throws SQLException {
         try(Connection connection = dataSource.getConnection();
             PreparedStatement stmt = connection.prepareStatement(UPDATE_CARD)) {
             stmt.setDouble(1, card.getBalance());
