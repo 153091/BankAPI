@@ -22,8 +22,12 @@ public class CardRepositoryTest {
     @BeforeAll
     static void beforeAll() throws Exception {
         final String sqlCreate = String.join("\n",Files.readAllLines(Paths.get(Server.class.getResource("/TablesInit.sql").toURI())));
-        try (Connection connection = dataSource.getConnection();
-             PreparedStatement statement = connection.prepareStatement(sqlCreate)) {
+        final String sqlPopulate = String.join("\n",Files.readAllLines(Paths.get(Server.class.getResource("/Populate.sql").toURI())));
+        Connection connection = dataSource.getConnection();
+        try (PreparedStatement statement = connection.prepareStatement(sqlCreate)) {
+            statement.executeUpdate();
+        }
+        try (PreparedStatement statement = connection.prepareStatement(sqlPopulate)) {
             statement.executeUpdate();
         }
     }
@@ -31,13 +35,13 @@ public class CardRepositoryTest {
     @Test
     public void addCardTest() throws SQLException {
         Card tempCard = new Card();
-        tempCard.setAccountId(10);
-        tempCard.setNumber("111 222 333");
+        tempCard.setAccountId(0);
+        tempCard.setNumber("111 222 555");
         tempCard.setBalance(200);
 
         cardRepository.addCard(tempCard);
 
-        final Card actual = cardRepository.getCardById(0);
+        final Card actual = cardRepository.getCardById(1);
         assertEquals(tempCard.getNumber(), actual.getNumber());
         assertEquals(tempCard.getBalance(), actual.getBalance());
         assertEquals(tempCard.getAccountId(), actual.getAccountId());
@@ -46,11 +50,11 @@ public class CardRepositoryTest {
     @Test
     public void getCardByIdTest() throws SQLException {
         Card tempCard = new Card();
-        tempCard.setAccountId(10);
+        tempCard.setAccountId(0);
         tempCard.setNumber("111 222 333");
         tempCard.setBalance(200);
         cardRepository.addCard(tempCard);
-        final Card actual = cardRepository.getCardById(0);
+        final Card actual = cardRepository.getCardById(1);
         assertEquals(tempCard.getNumber(), actual.getNumber());
         assertEquals(tempCard.getBalance(), actual.getBalance());
         assertEquals(tempCard.getAccountId(), actual.getAccountId());

@@ -23,8 +23,12 @@ public class AccountRepositoryTest {
     @BeforeAll
     static void beforeAll() throws Exception {
         final String sqlCreate = String.join("\n",Files.readAllLines(Paths.get(Server.class.getResource("/TablesInit.sql").toURI())));
-        try (Connection connection = dataSource.getConnection();
-             PreparedStatement statement = connection.prepareStatement(sqlCreate)) {
+        final String sqlPopulate = String.join("\n",Files.readAllLines(Paths.get(Server.class.getResource("/Populate.sql").toURI())));
+        Connection connection = dataSource.getConnection();
+          try (PreparedStatement statement = connection.prepareStatement(sqlCreate)) {
+            statement.executeUpdate();
+        }
+        try (PreparedStatement statement = connection.prepareStatement(sqlPopulate)) {
             statement.executeUpdate();
         }
     }
@@ -33,11 +37,11 @@ public class AccountRepositoryTest {
     public void addAccountTest() throws SQLException {
         Account tempAccount = new Account();
         tempAccount.setNumber("12 13 14");
-        tempAccount.setUserId(1);
+        tempAccount.setUserId(0);
 
         accountRepository.addAccount(tempAccount);
 
-        final Account actual = accountRepository.getAccountById(0);
+        final Account actual = accountRepository.getAccountById(1);
         assertEquals(tempAccount.getNumber(), actual.getNumber());
         assertEquals(tempAccount.getUserId(), actual.getUserId());
     }
@@ -45,10 +49,10 @@ public class AccountRepositoryTest {
     @Test
     public void getAccountByIdTest() throws SQLException {
         Account tempAccount = new Account();
-        tempAccount.setNumber("12 13 14");
-        tempAccount.setUserId(1);
+        tempAccount.setNumber("12 13 55");
+        tempAccount.setUserId(0);
         accountRepository.addAccount(tempAccount);
-        final Account actual = accountRepository.getAccountById(0);
+        final Account actual = accountRepository.getAccountById(1);
         assertEquals(tempAccount.getNumber(), actual.getNumber());
         assertEquals(tempAccount.getUserId(), actual.getUserId());
     }
