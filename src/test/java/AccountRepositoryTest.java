@@ -1,5 +1,6 @@
 import Entity.Account;
 import org.h2.jdbcx.JdbcConnectionPool;
+import org.h2.tools.Server;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import repository.AccountRepositoryImpl;
@@ -21,9 +22,9 @@ public class AccountRepositoryTest {
 
     @BeforeAll
     static void beforeAll() throws Exception {
-        final String sqlCreateTables = String.join("\n", Files.readAllLines(Paths.get(AccountRepositoryTest.class.getResource("/CreateTables.sql").toURI())));
+        final String sqlCreate = String.join("\n",Files.readAllLines(Paths.get(Server.class.getResource("/TablesInit.sql").toURI())));
         try (Connection connection = dataSource.getConnection();
-             PreparedStatement statement = connection.prepareStatement(sqlCreateTables)) {
+             PreparedStatement statement = connection.prepareStatement(sqlCreate)) {
             statement.executeUpdate();
         }
     }
