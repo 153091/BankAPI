@@ -13,6 +13,11 @@ import java.util.List;
 
 public class CardRepositoryImpl implements CardRepository {
 
+    private static final String ADD_CARD = "insert into cards (account_id, number, balance) values (?, ?, ?)";
+    private static final String GET_ALL_CLIENT_CARDS = "select * from cards where account_id = ?";
+    private static final String GET_CARD_BY_ID = "select * from cards where id = ?";
+    private static final String UPDATE_CARD = "update cards set balance = ? where id = ?";
+
     private DataSource dataSource;
 
     public CardRepositoryImpl(DataSource dataSource) {
@@ -20,11 +25,12 @@ public class CardRepositoryImpl implements CardRepository {
     }
 
     @Override
-    public void addCard(Account account, Card card) throws SQLException {
+    public void addCard(Card card) throws SQLException {
         try(Connection connection = dataSource.getConnection();
-            PreparedStatement ps = connection.prepareStatement(ADD_ACCOUNT)){
-            ps.setInt(1, user.getId());
-            ps.setString(2, account.getNumber());
+            PreparedStatement ps = connection.prepareStatement(ADD_CARD)){
+            ps.setInt(1, card.getAccountId());
+            ps.setString(2, card.getNumber());
+            ps.setDouble(3, card.getBalance());
             ps.execute();
         }
     }
@@ -32,21 +38,23 @@ public class CardRepositoryImpl implements CardRepository {
     @Override
     public List<Card> getAllCards(Account account) throws SQLException {
         try(Connection connection = dataSource.getConnection();
-            PreparedStatement stmt = connection.prepareStatement(GET_ALL_ACCOUNTS_BY_USER_ID)) {
-            stmt.setInt(1, user.getId());
+            PreparedStatement stmt = connection.prepareStatement(GET_ALL_CLIENT_CARDS)) {
+            stmt.setInt(1, account.getId());
             ResultSet rs = stmt.executeQuery();
-            List<Account> accounts = new ArrayList<>();
+            List<Card> cards = new ArrayList<>();
             while (rs.next()) {
-                Account account = Account.builder()
+                Card card = Card.builder()
                         .id(rs.getInt("id"))
+                        .accountId(rs.getInt("account_id"))
                         .number(rs.getString("number"))
+                        .balance(rs.getDouble("balance"))
                         .build();
-                accounts.add(account);
+                cards.add(card);
             }
-            if (accounts.isEmpty()) {
+            if (cards.isEmpty()) {
                 throw new SQLException("Not found any account!");
             } else {
-                return accounts;
+                return cards;
             }
         }
     }
@@ -54,15 +62,17 @@ public class CardRepositoryImpl implements CardRepository {
     @Override
     public Card getCardById(Integer id) throws SQLException {
         try (Connection connection = dataSource.getConnection();
-             PreparedStatement stmt = connection.prepareStatement(GET_ACCOUNT_BY_ID)) {
+             PreparedStatement stmt = connection.prepareStatement(GET_CARD_BY_ID)) {
             stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                Account account = Account.builder()
+                Card card = Card.builder()
                         .id(rs.getInt("id"))
+                        .accountId(rs.getInt("account_id"))
                         .number(rs.getString("number"))
+                        .balance(rs.getDouble("balance"))
                         .build();
-                return account;
+                return card;
             }
             else {
                 throw new SQLException("User not found.");
@@ -72,6 +82,13 @@ public class CardRepositoryImpl implements CardRepository {
 
     @Override
     public void updateCard(Card card) throws SQLException {
-
+        try(Connection connection = dataSource.getConnection();
+            PreparedStatement stmt = connection.prepareStatement(UPDATE_CARD)) {
+            stmt.setDouble(1, card.getBalance());
+            stmt.setInt(2, card.getId());
+            stmt.execute();
+        } catch (SQLException throwabl) {
+            throwabl.printStackTrace();
+        }
     }
 }

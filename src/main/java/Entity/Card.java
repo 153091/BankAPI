@@ -8,9 +8,8 @@ import lombok.*;
 @Builder
 public class Card {
     private int id;
-    private Account account;
+    private int accountId;
     private String number;
     private double balance;
-    private User user;
 
 }
