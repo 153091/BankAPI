@@ -16,6 +16,7 @@ public class UserRepositoryImpl implements UserRepository {
     private final static String GET_USER_BY_ID = "select * from users where id = ?";
     private final static String UPDATE_USERS = "update users set name = ?, age = ?  where id = ?";
     private final static String ADD_USER = "INSERT INTO users (name, age) VALUES (?, ?)";
+    private final static String DELETE_USER = "delete from users where id = ?";
 
     private DataSource dataSource;
 
@@ -85,6 +86,17 @@ public class UserRepositoryImpl implements UserRepository {
             stmt.execute();
         } catch (SQLException throwabl) {
             throwabl.printStackTrace();
+        }
+    }
+
+    @Override
+    public boolean deleteUserById(int id) throws SQLException {
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement stmt = connection.prepareStatement(DELETE_USER)) {
+            stmt.setInt(1, id);
+            int affectedRow = stmt.executeUpdate();
+            
+            return affectedRow != 0;
         }
     }
 }

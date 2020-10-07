@@ -31,7 +31,7 @@ public class UserRepositoryTest {
     }
 
     @Test
-    public void addUserTest() throws SQLException {
+    public void testAddUser() throws SQLException {
         User tempUser = new User();
         tempUser.setName("Alex");
         tempUser.setAge(28);
@@ -44,7 +44,7 @@ public class UserRepositoryTest {
     }
 
     @Test
-    public void getUserByIdTest() throws SQLException {
+    public void testGetUserById() throws SQLException {
         User tempUser = new User();
         tempUser.setName("Slava");
         tempUser.setAge(28);
@@ -55,7 +55,7 @@ public class UserRepositoryTest {
     }
 
     @Test
-    public void getAllTest() throws SQLException {
+    public void testGetAll() throws SQLException {
         User tempUser = new User();
         tempUser.setName("Gosha");
         tempUser.setAge(50);
@@ -77,7 +77,7 @@ public class UserRepositoryTest {
     }
 
     @Test
-    void updateUserTest() throws SQLException {
+    void testUpdateUser() throws SQLException {
         User tempUser = new User();
         tempUser.setName("Petya");
         tempUser.setAge(50);

@@ -18,4 +18,7 @@ public interface UserRepository {
     // update user
     void updateUser(User user) throws SQLException;
 
+    //delete by id
+    boolean deleteUserById(int id) throws SQLException;
+
 }

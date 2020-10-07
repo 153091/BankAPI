@@ -38,7 +38,7 @@ public class AccountRepositoryTest {
     }
 
     @Test
-    public void addAccountTest() throws SQLException {
+    public void testAddAccount() throws SQLException {
         Account tempAccount = new Account();
         tempAccount.setNumber("12 13 14");
         tempAccount.setUserId(0);
@@ -51,7 +51,7 @@ public class AccountRepositoryTest {
     }
 
     @Test
-    public void getAccountByIdTest() throws SQLException {
+    public void testGetAccountById() throws SQLException {
         Account tempAccount = new Account();
         tempAccount.setNumber("12 13 55");
         tempAccount.setUserId(0);
@@ -62,7 +62,7 @@ public class AccountRepositoryTest {
     }
 
     @Test
-    public void getAllUserAccountsTest() throws SQLException {
+    public void testGetAllUserAccounts() throws SQLException {
         Account tempAccount = new Account();
         tempAccount.setNumber("12 13 55");
         tempAccount.setUserId(0);
@@ -82,7 +82,7 @@ public class AccountRepositoryTest {
     }
 
     @Test
-    public void updateAccountTest() throws SQLException {
+    public void testUpdateAccount() throws SQLException {
         Account tempAccount = new Account();
         tempAccount.setNumber("12 13 55");
         tempAccount.setUserId(0);

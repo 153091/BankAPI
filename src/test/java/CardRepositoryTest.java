@@ -37,7 +37,7 @@ public class CardRepositoryTest {
     }
 
     @Test
-    public void addCardTest() throws SQLException {
+    public void testAddCard() throws SQLException {
         Card tempCard = new Card();
         tempCard.setAccountId(0);
         tempCard.setNumber("111 222 555");
@@ -52,7 +52,7 @@ public class CardRepositoryTest {
     }
 
     @Test
-    public void getCardByIdTest() throws SQLException {
+    public void testGetCardById() throws SQLException {
         Card tempCard = new Card();
         tempCard.setAccountId(0);
         tempCard.setNumber("111 222 333");
@@ -65,7 +65,7 @@ public class CardRepositoryTest {
     }
 
     @Test
-    public void getAllCardsTest() throws SQLException {
+    public void testGetAllCards() throws SQLException {
         Card tempCard = new Card();
         tempCard.setAccountId(0);
         tempCard.setNumber("111 222 333");
@@ -87,7 +87,7 @@ public class CardRepositoryTest {
     }
 
     @Test
-    public void updateCardTest() throws SQLException {
+    public void testUpdateCard() throws SQLException {
         Card tempCard = new Card();
         tempCard.setAccountId(0);
         tempCard.setNumber("111 222 333");
