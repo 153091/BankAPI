@@ -26,7 +26,7 @@ public class AccountRepositoryImpl implements AccountRepository {
     }
 
     @Override
-    public void addAccount(Account account) throws SQLException {
+    public Account addAccount(Account account) throws SQLException {
         try(Connection connection = dataSource.getConnection();
             PreparedStatement ps = connection.prepareStatement(ADD_ACCOUNT)){
             ps.setInt(1, account.getUserId());
@@ -79,7 +79,7 @@ public class AccountRepositoryImpl implements AccountRepository {
     }
 
     @Override
-    public void updateAccount(Account account) {
+    public Account updateAccount(Account account) {
         try(Connection connection = dataSource.getConnection();
             PreparedStatement stmt = connection.prepareStatement(UPDATE_ACCOUNT)) {
             stmt.setString(1, account.getNumber());
