@@ -4,10 +4,7 @@ import Entity.Account;
 import Entity.User;
 
 import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,12 +24,25 @@ public class AccountRepositoryImpl implements AccountRepository {
     }
 
     @Override
-    public void addAccount(Account account) throws SQLException {
+    public Account addAccount(Account account) throws SQLException {
         try(Connection connection = dataSource.getConnection();
-            PreparedStatement ps = connection.prepareStatement(ADD_ACCOUNT)){
+            PreparedStatement ps = connection.prepareStatement(ADD_ACCOUNT, Statement.RETURN_GENERATED_KEYS)){
             ps.setInt(1, account.getUserId());
             ps.setString(2, account.getNumber());
-            ps.execute();
+            int affectedRows = ps.executeUpdate();
+
+            if (affectedRows == 0) {
+                throw new SQLException("Creating Account failed, no rows affected.");
+            }
+
+            try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    account.setId(generatedKeys.getInt(1));
+                    return account;
+                } else {
+                    throw new SQLException("Creating Account failed, no ID obtained.");
+                }
+            }
         }
     }
 

@@ -4,10 +4,7 @@ import Entity.Account;
 import Entity.Card;
 
 import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,13 +23,26 @@ public class CardRepositoryImpl implements CardRepository {
     }
 
     @Override
-    public void addCard(Card card) throws SQLException {
+    public Card addCard(Card card) throws SQLException {
         try(Connection connection = dataSource.getConnection();
-            PreparedStatement ps = connection.prepareStatement(ADD_CARD)){
+            PreparedStatement ps = connection.prepareStatement(ADD_CARD, Statement.RETURN_GENERATED_KEYS)){
             ps.setInt(1, card.getAccountId());
             ps.setString(2, card.getNumber());
             ps.setDouble(3, card.getBalance());
-            ps.execute();
+            int affectedRows = ps.executeUpdate();
+
+            if (affectedRows == 0) {
+                throw new SQLException("Creating card failed, no rows affected.");
+            }
+
+            try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    card.setId(generatedKeys.getInt(1));
+                    return card;
+                } else {
+                    throw new SQLException("Creating card failed, no ID obtained.");
+                }
+            }
         }
     }
 

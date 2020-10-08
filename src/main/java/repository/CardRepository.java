@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface CardRepository {
 
-    void addCard(Card card) throws SQLException;
+    Card addCard(Card card) throws SQLException;
 
     List<Card> getAllCards(Account account) throws SQLException;
 

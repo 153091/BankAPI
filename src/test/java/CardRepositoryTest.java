@@ -1,10 +1,13 @@
 import Entity.Account;
 import Entity.Card;
+import Entity.User;
 import org.h2.jdbcx.JdbcConnectionPool;
 import org.h2.tools.Server;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import repository.AccountRepositoryImpl;
 import repository.CardRepositoryImpl;
+import repository.UserRepositoryImpl;
 
 import javax.sql.DataSource;
 import java.nio.file.Files;
@@ -24,75 +27,120 @@ public class CardRepositoryTest {
     @BeforeEach
     public void beforeAll() throws Exception {
         final String sqlCreate = String.join("\n",Files.readAllLines(Paths.get(Server.class.getResource("/TablesInit.sql").toURI())));
-        final String sqlPopulate = String.join("\n",Files.readAllLines(Paths.get(Server.class.getResource("/Populate.sql").toURI())));
+
         Connection connection = dataSource.getConnection();
         try (PreparedStatement statement = connection.prepareStatement(sqlCreate)) {
-            statement.executeUpdate();
-        }
-        try (PreparedStatement statement = connection.prepareStatement(sqlPopulate)) {
             statement.executeUpdate();
         }
     }
 
     @Test
     public void testAddCard() throws SQLException {
+        User tempUser = new User();
+        tempUser.setName("Alex");
+        tempUser.setAge(28);
+        UserRepositoryImpl userRepository = new UserRepositoryImpl(dataSource);
+        User savedUser = userRepository.addUser(tempUser);
+
+        Account tempAccount = new Account();
+        tempAccount.setNumber("12 13 55");
+        tempAccount.setUserId(savedUser.getId());
+        AccountRepositoryImpl accountRepository = new AccountRepositoryImpl(dataSource);
+        Account savedAccount = accountRepository.addAccount(tempAccount);
+
         Card tempCard = new Card();
-        tempCard.setAccountId(0);
+        tempCard.setAccountId(savedAccount.getId());
         tempCard.setNumber("111 222 555");
         tempCard.setBalance(200);
 
-        cardRepository.addCard(tempCard);
+        final Card saved = cardRepository.addCard(tempCard);
 
-        final Card actual = cardRepository.getCardById(1);
-        assertEquals(tempCard.getNumber(), actual.getNumber());
-        assertEquals(tempCard.getBalance(), actual.getBalance());
-        assertEquals(tempCard.getAccountId(), actual.getAccountId());
+        final Card actual = cardRepository.getCardById(saved.getId());
+        assertEquals(saved.getNumber(), actual.getNumber());
+        assertEquals(saved.getBalance(), actual.getBalance());
+        assertEquals(saved.getAccountId(), actual.getAccountId());
     }
 
     @Test
     public void testGetCardById() throws SQLException {
+        User tempUser = new User();
+        tempUser.setName("Alex");
+        tempUser.setAge(28);
+        UserRepositoryImpl userRepository = new UserRepositoryImpl(dataSource);
+        User savedUser = userRepository.addUser(tempUser);
+
+        Account tempAccount = new Account();
+        tempAccount.setNumber("12 13 55");
+        tempAccount.setUserId(savedUser.getId());
+        AccountRepositoryImpl accountRepository = new AccountRepositoryImpl(dataSource);
+        Account savedAccount = accountRepository.addAccount(tempAccount);
+
         Card tempCard = new Card();
-        tempCard.setAccountId(0);
-        tempCard.setNumber("111 222 333");
+        tempCard.setAccountId(savedAccount.getId());
+        tempCard.setNumber("111 222 555");
         tempCard.setBalance(200);
-        cardRepository.addCard(tempCard);
-        final Card actual = cardRepository.getCardById(1);
-        assertEquals(tempCard.getNumber(), actual.getNumber());
-        assertEquals(tempCard.getBalance(), actual.getBalance());
-        assertEquals(tempCard.getAccountId(), actual.getAccountId());
+
+        final Card saved = cardRepository.addCard(tempCard);
+        final Card actual = cardRepository.getCardById(saved.getId());
+        assertEquals(saved.getNumber(), actual.getNumber());
+        assertEquals(saved.getBalance(), actual.getBalance());
+        assertEquals(saved.getAccountId(), actual.getAccountId());
     }
 
     @Test
     public void testGetAllCards() throws SQLException {
+        User tempUser = new User();
+        tempUser.setName("Alex");
+        tempUser.setAge(28);
+        UserRepositoryImpl userRepository = new UserRepositoryImpl(dataSource);
+        User savedUser = userRepository.addUser(tempUser);
+
+        Account tempAccount = new Account();
+        tempAccount.setNumber("12 13 55");
+        tempAccount.setUserId(savedUser.getId());
+        AccountRepositoryImpl accountRepository = new AccountRepositoryImpl(dataSource);
+        Account savedAccount = accountRepository.addAccount(tempAccount);
+
         Card tempCard = new Card();
-        tempCard.setAccountId(0);
-        tempCard.setNumber("111 222 333");
+        tempCard.setAccountId(savedAccount.getId());
+        tempCard.setNumber("111 222 555");
         tempCard.setBalance(200);
-        cardRepository.addCard(tempCard);
 
-        Account account = new Account();
-        account.setId(0);
+        final Card saved = cardRepository.addCard(tempCard);
 
-        List<Card> allCards = cardRepository.getAllCards(account);
-        assertEquals(allCards.size(), 2);
+        List<Card> allCards = cardRepository.getAllCards(savedAccount);
+        assertEquals(allCards.size(), 1);
 
-        for (int i = 0; i < allCards.size(); i++) {
-            final Card actual = cardRepository.getCardById(i);
-            assertEquals(allCards.get(i).getNumber(), actual.getNumber());
-            assertEquals(allCards.get(i).getBalance(), actual.getBalance());
-            assertEquals(allCards.get(i).getAccountId(), actual.getAccountId());
-        }
+
+            final Card actual = cardRepository.getCardById(saved.getId());
+            assertEquals(allCards.get(0).getNumber(), actual.getNumber());
+            assertEquals(allCards.get(0).getBalance(), actual.getBalance());
+            assertEquals(allCards.get(0).getAccountId(), actual.getAccountId());
+
     }
 
     @Test
     public void testDeleteCard() throws SQLException {
-        Card tempCard = new Card();
-        tempCard.setAccountId(0);
-        tempCard.setNumber("111 222 333");
-        tempCard.setBalance(200);
-        cardRepository.addCard(tempCard);
+        User tempUser = new User();
+        tempUser.setName("Alex");
+        tempUser.setAge(28);
+        UserRepositoryImpl userRepository = new UserRepositoryImpl(dataSource);
+        User savedUser = userRepository.addUser(tempUser);
 
-        cardRepository.deleteCardById(1);
+        Account tempAccount = new Account();
+        tempAccount.setNumber("12 13 55");
+        tempAccount.setUserId(savedUser.getId());
+        AccountRepositoryImpl accountRepository = new AccountRepositoryImpl(dataSource);
+        Account savedAccount = accountRepository.addAccount(tempAccount);
+
+        Card tempCard = new Card();
+        tempCard.setAccountId(savedAccount.getId());
+        tempCard.setNumber("111 222 555");
+        tempCard.setBalance(200);
+
+        final Card saved = cardRepository.addCard(tempCard);
+
+        cardRepository.deleteCardById(saved.getId());
 
         boolean result = false;
 
@@ -107,16 +155,30 @@ public class CardRepositoryTest {
 
     @Test
     public void testUpdateCard() throws SQLException {
+        User tempUser = new User();
+        tempUser.setName("Alex");
+        tempUser.setAge(28);
+        UserRepositoryImpl userRepository = new UserRepositoryImpl(dataSource);
+        User savedUser = userRepository.addUser(tempUser);
+
+        Account tempAccount = new Account();
+        tempAccount.setNumber("12 13 55");
+        tempAccount.setUserId(savedUser.getId());
+        AccountRepositoryImpl accountRepository = new AccountRepositoryImpl(dataSource);
+        Account savedAccount = accountRepository.addAccount(tempAccount);
+
         Card tempCard = new Card();
-        tempCard.setAccountId(0);
-        tempCard.setNumber("111 222 333");
+        tempCard.setAccountId(savedAccount.getId());
+        tempCard.setNumber("111 222 555");
         tempCard.setBalance(200);
-        tempCard.setId(0);
 
-        cardRepository.updateCard(tempCard);
+        Card saved = cardRepository.addCard(tempCard);
 
-        final Card actual = cardRepository.getCardById(0);
-        assertEquals(tempCard.getNumber(), actual.getNumber());
-        assertEquals(tempCard.getBalance(), actual.getBalance());
+        saved.setBalance(10000);
+        cardRepository.updateCard(saved);
+
+        final Card actual = cardRepository.getCardById(saved.getId());
+        assertEquals(saved.getNumber(), actual.getNumber());
+        assertEquals(saved.getBalance(), actual.getBalance());
     }
 }

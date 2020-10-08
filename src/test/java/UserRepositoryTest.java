@@ -35,11 +35,11 @@ public class UserRepositoryTest {
         tempUser.setName("Alex");
         tempUser.setAge(28);
 
-        userRepository.addUser(tempUser);
+        final User saved = userRepository.addUser(tempUser);
+        final User actual = userRepository.getUserById(saved.getId());
 
-        final User actual = userRepository.getUserById(0);
-        assertEquals(tempUser.getName(), actual.getName());
-        assertEquals(tempUser.getAge(), actual.getAge());
+        assertEquals(saved.getName(), actual.getName());
+        assertEquals(saved.getAge(), actual.getAge());
     }
 
     @Test
@@ -47,10 +47,12 @@ public class UserRepositoryTest {
         User tempUser = new User();
         tempUser.setName("Slava");
         tempUser.setAge(28);
-        userRepository.addUser(tempUser);
-        final User actual = userRepository.getUserById(0);
-        assertEquals(tempUser.getName(), actual.getName());
-        assertEquals(tempUser.getAge(), actual.getAge());
+
+        final User saved = userRepository.addUser(tempUser);
+        final User actual = userRepository.getUserById(saved.getId());
+
+        assertEquals(saved.getName(), actual.getName());
+        assertEquals(saved.getAge(), actual.getAge());
     }
 
     @Test
@@ -58,21 +60,16 @@ public class UserRepositoryTest {
         User tempUser = new User();
         tempUser.setName("Gosha");
         tempUser.setAge(50);
-        userRepository.addUser(tempUser);
-
-        User tempUser2 = new User();
-        tempUser2.setName("Misha");
-        tempUser2.setAge(28);
-        userRepository.addUser(tempUser2);
+        final User saved = userRepository.addUser(tempUser);
 
         List<User> allUsers = userRepository.getAll();
-        assertEquals(allUsers.size(), 2);
+        assertEquals(allUsers.size(), 1);
 
-        for (int i = 0; i < allUsers.size(); i++) {
-            final User actual = userRepository.getUserById(i);
-            assertEquals(allUsers.get(i).getName(), actual.getName());
-            assertEquals(allUsers.get(i).getAge(), actual.getAge());
-        }
+
+            final User actual = userRepository.getUserById(saved.getId());
+            assertEquals(allUsers.get(0).getName(), actual.getName());
+            assertEquals(allUsers.get(0).getAge(), actual.getAge());
+
     }
 
     @Test
@@ -100,14 +97,14 @@ public class UserRepositoryTest {
         User tempUser = new User();
         tempUser.setName("Petya");
         tempUser.setAge(50);
-        tempUser.setId(0);
-        userRepository.addUser(tempUser);
 
-        tempUser.setName("Kolya");
-        tempUser.setAge(20);
-        userRepository.updateUser(tempUser);
-        final User actual = userRepository.getUserById(0);
-        assertEquals(tempUser.getName(), actual.getName());
-        assertEquals(tempUser.getAge(), actual.getAge());
+        User saved = userRepository.addUser(tempUser);
+
+        saved.setName("Kolya");
+        saved.setAge(20);
+        userRepository.updateUser(saved);
+        final User actual = userRepository.getUserById(saved.getId());
+        assertEquals(saved.getName(), actual.getName());
+        assertEquals(saved.getAge(), actual.getAge());
     }
 }

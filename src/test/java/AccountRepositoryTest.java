@@ -5,6 +5,7 @@ import org.h2.tools.Server;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import repository.AccountRepositoryImpl;
+import repository.UserRepositoryImpl;
 
 
 import javax.sql.DataSource;
@@ -25,68 +26,89 @@ public class AccountRepositoryTest {
     @BeforeEach
     public void beforeAll() throws Exception {
         final String sqlCreate = String.join("\n",Files.readAllLines(Paths.get(Server.class.getResource("/TablesInit.sql").toURI())));
-        final String sqlPopulate = String.join("\n",Files.readAllLines(Paths.get(Server.class.getResource("/Populate.sql").toURI())));
+
         Connection connection = dataSource.getConnection();
           try (PreparedStatement statement = connection.prepareStatement(sqlCreate)) {
-            statement.executeUpdate();
-        }
-        try (PreparedStatement statement = connection.prepareStatement(sqlPopulate)) {
             statement.executeUpdate();
         }
     }
 
     @Test
     public void testAddAccount() throws SQLException {
+        User tempUser = new User();
+        tempUser.setName("Alex");
+        tempUser.setAge(28);
+        UserRepositoryImpl userRepository = new UserRepositoryImpl(dataSource);
+        User savedUser = userRepository.addUser(tempUser);
+
         Account tempAccount = new Account();
-        tempAccount.setNumber("12 13 14");
-        tempAccount.setUserId(0);
+        tempAccount.setNumber("12 13 55");
+        tempAccount.setUserId(savedUser.getId());
 
-        accountRepository.addAccount(tempAccount);
 
-        final Account actual = accountRepository.getAccountById(1);
-        assertEquals(tempAccount.getNumber(), actual.getNumber());
-        assertEquals(tempAccount.getUserId(), actual.getUserId());
+        final Account saved = accountRepository.addAccount(tempAccount);
+        final Account actual = accountRepository.getAccountById(saved.getId());
+        assertEquals(saved.getNumber(), actual.getNumber());
+        assertEquals(saved.getUserId(), actual.getUserId());
     }
 
     @Test
     public void testGetAccountById() throws SQLException {
+        User tempUser = new User();
+        tempUser.setName("Alex");
+        tempUser.setAge(28);
+        UserRepositoryImpl userRepository = new UserRepositoryImpl(dataSource);
+        User savedUser = userRepository.addUser(tempUser);
+
         Account tempAccount = new Account();
         tempAccount.setNumber("12 13 55");
-        tempAccount.setUserId(0);
-        accountRepository.addAccount(tempAccount);
-        final Account actual = accountRepository.getAccountById(1);
-        assertEquals(tempAccount.getNumber(), actual.getNumber());
-        assertEquals(tempAccount.getUserId(), actual.getUserId());
+        tempAccount.setUserId(savedUser.getId());
+
+
+        final Account saved = accountRepository.addAccount(tempAccount);
+        final Account actual = accountRepository.getAccountById(saved.getId());
+        assertEquals(saved.getNumber(), actual.getNumber());
+        assertEquals(saved.getUserId(), actual.getUserId());
     }
 
     @Test
     public void testGetAllUserAccounts() throws SQLException {
+        User tempUser = new User();
+        tempUser.setName("Alex");
+        tempUser.setAge(28);
+        UserRepositoryImpl userRepository = new UserRepositoryImpl(dataSource);
+        User savedUser = userRepository.addUser(tempUser);
+
         Account tempAccount = new Account();
         tempAccount.setNumber("12 13 55");
-        tempAccount.setUserId(0);
-        accountRepository.addAccount(tempAccount);
+        tempAccount.setUserId(savedUser.getId());
 
-        User user = new User();
-        user.setId(0);
 
-        List<Account> allAccounts = accountRepository.getAllUserAccounts(user);
-        assertEquals(allAccounts.size(), 2);
+        final Account saved = accountRepository.addAccount(tempAccount);
+        final Account actual = accountRepository.getAccountById(saved.getId());
 
-        for (int i = 0; i < allAccounts.size(); i++) {
-            final Account actual = accountRepository.getAccountById(i);
-            assertEquals(allAccounts.get(i).getNumber(), actual.getNumber());
-            assertEquals(allAccounts.get(i).getUserId(), actual.getUserId());
-        }
+        List<Account> allAccounts = accountRepository.getAllUserAccounts(savedUser);
+        assertEquals(allAccounts.size(), 1);
+
+            assertEquals(allAccounts.get(0).getNumber(), actual.getNumber());
+            assertEquals(allAccounts.get(0).getUserId(), actual.getUserId());
+
     }
 
     @Test
     public void testDeleteCard() throws SQLException {
+        User tempUser = new User();
+        tempUser.setName("Alex");
+        tempUser.setAge(28);
+        UserRepositoryImpl userRepository = new UserRepositoryImpl(dataSource);
+        User savedUser = userRepository.addUser(tempUser);
+
         Account tempAccount = new Account();
         tempAccount.setNumber("12 13 55");
-        tempAccount.setUserId(0);
-        accountRepository.addAccount(tempAccount);
+        tempAccount.setUserId(savedUser.getId());
 
-        accountRepository.deleteAccountById(1);
+        final Account saved = accountRepository.addAccount(tempAccount);
+        accountRepository.deleteAccountById(saved.getId());
 
         boolean result = false;
 
@@ -101,14 +123,22 @@ public class AccountRepositoryTest {
 
     @Test
     public void testUpdateAccount() throws SQLException {
+        User tempUser = new User();
+        tempUser.setName("Alex");
+        tempUser.setAge(28);
+        UserRepositoryImpl userRepository = new UserRepositoryImpl(dataSource);
+        User savedUser = userRepository.addUser(tempUser);
+
         Account tempAccount = new Account();
         tempAccount.setNumber("12 13 55");
-        tempAccount.setUserId(0);
-        tempAccount.setId(0);
+        tempAccount.setUserId(savedUser.getId());
 
-        accountRepository.updateAccount(tempAccount);
+        final Account saved = accountRepository.addAccount(tempAccount);
 
-        final Account actual = accountRepository.getAccountById(0);
+        saved.setNumber("234");
+        accountRepository.updateAccount(saved);
+
+        final Account actual = accountRepository.getAccountById(saved.getId());
         assertEquals(tempAccount.getNumber(), actual.getNumber());
         assertEquals(tempAccount.getUserId(), actual.getUserId());
     }
