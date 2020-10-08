@@ -1,5 +1,6 @@
 package service;
 
+import Entity.Account;
 import Entity.Card;
 import dto.CardDTO;
 import repository.CardRepositoryImpl;
@@ -16,11 +17,11 @@ public class CardService {
     }
 
     public CardDTO getCardById(int id) throws SQLException {
-        return fromCardDto(cardRepository.getById(id));
+        return fromCardDto(cardRepository.getCardById(id));
     }
 
-    public List<CardDTO> getAll() throws SQLException {
-        List<Card> listCard = cardRepository.getAll();
+    public List<CardDTO> getAll(Account account) throws SQLException {
+        List<Card> listCard = cardRepository.getAllCards(account);
         List<CardDTO> listCardDto = new ArrayList<>();
 
         for (Card card : listCard) {
@@ -30,6 +31,6 @@ public class CardService {
     }
 
     private CardDTO fromCardDto(Card card) {
-        return new CardDTO(card.getId(), card.getCardNumber(), card.getCardBalance(), card.getAccountId());
+        return new CardDTO(card.getId(), card.getNumber(), card.getBalance(), card.getAccountId());
     }
 }
